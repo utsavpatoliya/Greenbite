@@ -4,7 +4,7 @@
   "description": "A platform for managing food waste between restaurants and NGOs",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/server/index.js",
+    "start": "node index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server/index.js",
     "client": "cd client && npm start",
