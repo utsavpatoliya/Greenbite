@@ -12,7 +12,7 @@ import FoodDonate from './components/FoodDonate';
 import './App.css';
 
 // Set default axios base URL
-axios.defaults.baseURL = 'https://greenbite-lbw4.onrender.com/';
+axios.defaults.baseURL = 'https://greenbite-backend-gnnb.onrender.com';
 
 function App() {
   const [user, setUser] = useState(null);
