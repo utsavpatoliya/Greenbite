@@ -11,7 +11,7 @@ import Gallery from './components/Gallery';
 import FoodDonate from './components/FoodDonate';
 import './App.css';
 
-// Set default axios base URL
+// ✅ Set default axios base URL
 axios.defaults.baseURL = 'https://greenbite-backend-gnnb.onrender.com';
 
 function App() {
@@ -44,11 +44,11 @@ function App() {
     try {
       const response = await axios.post('/api/auth/login', { email, password });
       const { token, user } = response.data;
-      
+
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
-      
+
       toast.success('Login successful!');
       return true;
     } catch (error) {
@@ -61,11 +61,11 @@ function App() {
     try {
       const response = await axios.post('/api/auth/register', userData);
       const { token, user } = response.data;
-      
+
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
-      
+
       toast.success('Registration successful!');
       return true;
     } catch (error) {
@@ -126,4 +126,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
