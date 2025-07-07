@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Database connection
+// MongoDB connection
 mongoose.connect(
   process.env.MONGODB_URI || 
   'mongodb+srv://utsavpatoliya3110:LGX9FTnNIgmIfUZM@cluster0.c2a12eq.mongodb.net/waste-food-management?retryWrites=true&w=majority&appName=Cluster0',
@@ -41,10 +41,11 @@ app.use('/api/food', foodRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running', timestamp: new Date() });
 });
+
+// Root endpoint for Render or browser testing
 app.get('/', (req, res) => {
   res.send('Greenbite backend is running. Use /api/* endpoints.');
 });
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -60,3 +61,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+

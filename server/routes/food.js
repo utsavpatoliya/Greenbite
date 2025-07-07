@@ -5,6 +5,11 @@ const { auth, requireUserType } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Test route to confirm food router works
+router.get('/test', (req, res) => {
+  res.send('Food API test route working!');
+});
+
 // Create food post (Restaurant only)
 router.post('/', [
   auth,
@@ -44,11 +49,10 @@ router.post('/', [
   }
 });
 
-// Get all food posts (NGO can see all, Restaurant can see their own)
+// Get all food posts
 router.get('/', auth, async (req, res) => {
   try {
     let query = {};
-    
     if (req.user.userType === 'restaurant') {
       query.restaurant = req.user._id;
     }
@@ -72,11 +76,8 @@ router.get('/:id', auth, async (req, res) => {
       .populate('restaurant', 'organizationName email contactNumber address')
       .populate('ngoResponse.ngo', 'organizationName');
 
-    if (!food) {
-      return res.status(404).json({ message: 'Food post not found' });
-    }
+    if (!food) return res.status(404).json({ message: 'Food post not found' });
 
-    // Check if user has access to this food post
     if (req.user.userType === 'restaurant' && food.restaurant.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Access denied' });
     }
@@ -102,11 +103,8 @@ router.patch('/:id/status', [
     }
 
     const { status, notes } = req.body;
-
     const food = await Food.findById(req.params.id);
-    if (!food) {
-      return res.status(404).json({ message: 'Food post not found' });
-    }
+    if (!food) return res.status(404).json({ message: 'Food post not found' });
 
     if (food.status !== 'pending') {
       return res.status(400).json({ message: 'Food post has already been processed' });
@@ -131,14 +129,11 @@ router.patch('/:id/status', [
   }
 });
 
-// Delete food post (Restaurant only, if still pending)
+// Delete food post (Restaurant only)
 router.delete('/:id', [auth, requireUserType('restaurant')], async (req, res) => {
   try {
     const food = await Food.findById(req.params.id);
-    
-    if (!food) {
-      return res.status(404).json({ message: 'Food post not found' });
-    }
+    if (!food) return res.status(404).json({ message: 'Food post not found' });
 
     if (food.restaurant.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Access denied' });
@@ -149,7 +144,6 @@ router.delete('/:id', [auth, requireUserType('restaurant')], async (req, res) =>
     }
 
     await Food.findByIdAndDelete(req.params.id);
-
     res.json({ message: 'Food post deleted successfully' });
   } catch (error) {
     console.error('Delete food error:', error);
@@ -157,4 +151,4 @@ router.delete('/:id', [auth, requireUserType('restaurant')], async (req, res) =>
   }
 });
 
-module.exports = router; 
+module.exports = router;
