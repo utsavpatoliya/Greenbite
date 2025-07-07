@@ -41,6 +41,10 @@ app.use('/api/food', foodRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running', timestamp: new Date() });
 });
+app.get('/', (req, res) => {
+  res.send('Greenbite backend is running. Use /api/* endpoints.');
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
